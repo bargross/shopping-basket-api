@@ -51,7 +51,7 @@ namespace shopping_basket_api.Services
 
         public async Task<float> GetBasketTotalAsync(string basketId, bool withVAT)
         {
-            if (string.IsNullOrWhiteSpace(basketId)) throw new ArgumentException("BasketId is null.");
+            if (string.IsNullOrWhiteSpace(basketId)) throw new ArgumentException("Missing basket id.");
             
             var shoppingItems = await basketRepository.GetByBasketIdAsync(basketId);
 
@@ -62,7 +62,7 @@ namespace shopping_basket_api.Services
 
         public async Task CheckoutAsync(string basketId)
         {
-            if (string.IsNullOrWhiteSpace(basketId)) throw new ArgumentException("BasketId is null.");
+            if (string.IsNullOrWhiteSpace(basketId)) throw new ArgumentException("Missing basket id.");
 
             var shoppingItems = await basketRepository.GetByBasketIdAsync(basketId);
             if (!shoppingItems.Any()) throw new ArgumentException($"No items found for basket {basketId} or it might not exist.");

@@ -7,7 +7,7 @@
 
 ## Running the SQL Server container
 - ensure Docker Desktop is running in the background as the SQL server will run in a Docker container
-- navigate to the `shoipping-basket` directory in a terminal
+- navigate to the `shoipping-basket-api` directory in a terminal
 - run the following command to start the SQL Server container:
 ```docker-compose up -d```
 - this will start the SQL Server container in detached mode

@@ -18,6 +18,8 @@ namespace shopping_basket_api.Tests.Controller
 
         public ShoppingControllerTests()
         {
+            _fixture = new Fixture();
+
             _shoppingServiceMock = new Mock<IShoppingService>();
 
             _shoppingController = new ShoppingController(_shoppingServiceMock.Object);
@@ -29,7 +31,7 @@ namespace shopping_basket_api.Tests.Controller
             var request = _fixture.Create<AddBasketItemRequest>();
             var basketId = "basket-1";
 
-            var result = (await _shoppingController.AddBasketITems(basketId, request)) as BadRequestObjectResult;
+            var result = (await _shoppingController.AddBasketITems(basketId, request)) as NoContentResult;
 
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -42,7 +44,7 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.AddToBasketAsync(It.IsAny<string>(), It.IsAny<AddBasketItemRequest>()))
-                .ThrowsAsync(new Exception("something happened"));
+                .ThrowsAsync(new ArgumentException("something happened"));
 
             var result = (await _shoppingController.AddBasketITems(basketId, request)) as BadRequestObjectResult;
 
@@ -56,9 +58,9 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.AddToBasketAsync(It.IsAny<string>(), It.IsAny<AddBasketItemRequest>()))
-                .ThrowsAsync(new Exception("something happened"));
+                .ThrowsAsync(new OperationCanceledException("something happened"));
 
-            var result = (await _shoppingController.AddBasketITems(basketId, request)) as ObjectResult;
+            var result = (await _shoppingController.AddBasketITems(basketId, request)) as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
@@ -69,7 +71,7 @@ namespace shopping_basket_api.Tests.Controller
             var request = _fixture.Create<Discount>();
             var basketId = "basket-1";
 
-            var result = (await _shoppingController.AddDiscountToBasket(basketId, request)) as BadRequestObjectResult;
+            var result = (await _shoppingController.AddDiscountToBasket(basketId, request)) as NoContentResult;
 
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -82,7 +84,7 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.AddDiscountCodeAsync(It.IsAny<string>(), It.IsAny<Discount>()))
-                .ThrowsAsync(new Exception("something happened"));
+                .ThrowsAsync(new ArgumentException("something happened"));
 
             var result = (await _shoppingController.AddDiscountToBasket(basketId, request)) as BadRequestObjectResult;
 
@@ -96,9 +98,9 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.AddDiscountCodeAsync(It.IsAny<string>(), It.IsAny<Discount>()))
-                .ThrowsAsync(new Exception("something happened"));
+                .ThrowsAsync(new OperationCanceledException("something happened"));
 
-            var result = (await _shoppingController.AddDiscountToBasket(basketId, request)) as ObjectResult;
+            var result = (await _shoppingController.AddDiscountToBasket(basketId, request)) as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
@@ -138,9 +140,9 @@ namespace shopping_basket_api.Tests.Controller
             var itemId = "item-1";
 
             _shoppingServiceMock.Setup(x => x.RemoveItemAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .ThrowsAsync(new ArgumentException("something happened"));
+                .ThrowsAsync(new OperationCanceledException("something happened"));
 
-            var result = (await _shoppingController.RemoveBasketItem(basketId, itemId)) as ObjectResult;
+            var result = (await _shoppingController.RemoveBasketItem(basketId, itemId)) as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
@@ -177,9 +179,9 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.GetBasketTotalAsync(It.IsAny<string>(), It.IsAny<bool>()))
-                .ThrowsAsync(new ArgumentException("something happened"));
+                .ThrowsAsync(new OperationCanceledException("something happened"));
 
-            var result = (await _shoppingController.GetBasketTotal(basketId, true)) as ObjectResult;
+            var result = (await _shoppingController.GetBasketTotal(basketId, true)) as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }
@@ -190,7 +192,7 @@ namespace shopping_basket_api.Tests.Controller
             var request = _fixture.Create<AddBasketItemRequest>();
             var basketId = "basket-1";
 
-            var result = (await _shoppingController.Checkout(basketId)) as BadRequestObjectResult;
+            var result = (await _shoppingController.Checkout(basketId)) as NoContentResult;
 
             Assert.Equal(StatusCodes.Status204NoContent, result.StatusCode);
         }
@@ -216,9 +218,9 @@ namespace shopping_basket_api.Tests.Controller
             var basketId = "basket-1";
 
             _shoppingServiceMock.Setup(x => x.CheckoutAsync(It.IsAny<string>()))
-                .ThrowsAsync(new ArgumentException("something happened"));
+                .ThrowsAsync(new OperationCanceledException("something happened"));
 
-            var result = (await _shoppingController.Checkout(basketId)) as ObjectResult;
+            var result = (await _shoppingController.Checkout(basketId)) as StatusCodeResult;
 
             Assert.Equal(StatusCodes.Status500InternalServerError, result.StatusCode);
         }

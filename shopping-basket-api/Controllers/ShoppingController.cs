@@ -1,4 +1,3 @@
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using shopping_basket_api.Models;
 using shopping_basket_api.Services;

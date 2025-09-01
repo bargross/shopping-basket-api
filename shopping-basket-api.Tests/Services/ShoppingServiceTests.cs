@@ -50,18 +50,16 @@ namespace shopping_basket_api.Tests.Services
         [Fact]
         public async Task AddToBasketAsync_RequestIsNull_ThrowsArgumentException()
         {
-            var basketId = "basket-1";
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await _shoppingService.AddToBasketAsync(basketId, null));
-
-            Assert.Equal(exception.Message, $"No items found for basket {basketId} or it might not exist.");
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await _shoppingService.AddToBasketAsync("basket-1", null));
         }
 
         [Fact]
         public async Task AddToBasketAsync_RequestHasNoItems_ThrowsArgumentException()
         {
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await _shoppingService.AddToBasketAsync("basket-1", new Models.AddBasketItemRequest()));
+            var basketId = "basket-1";
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await _shoppingService.AddToBasketAsync(basketId, new Models.AddBasketItemRequest()));
 
-            Assert.Equal(exception.Message, "One or more items in the basket is null.");
+            Assert.Equal(exception.Message, $"No items found for basket {basketId} or it might not exist.");
         }
 
         [Fact]
@@ -154,7 +152,7 @@ namespace shopping_basket_api.Tests.Services
         [Fact]
         public async Task CheckoutAsync_RequestIsNull_ThrowsArgumentException()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await _shoppingService.AddDiscountCodeAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await _shoppingService.AddDiscountCodeAsync("basket-1", null));
         }
 
         [Theory]
@@ -163,11 +161,9 @@ namespace shopping_basket_api.Tests.Services
         [InlineData(" ")]
         public async Task AddDiscountCodeAsync_BasketIdIsNull_ThrowsArgumentException(string basketId)
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await _shoppingService.AddDiscountCodeAsync(new Models.Discount
-            {
-                BasketId = basketId,
-                Code = "code-1"
-            }));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await _shoppingService.AddDiscountCodeAsync(basketId, new Models.Discount()));
+
+            Assert.Equal(exception.Message, "Missing basket id.");
         }
 
         [Theory]
@@ -176,11 +172,12 @@ namespace shopping_basket_api.Tests.Services
         [InlineData(" ")]
         public async Task AddDiscountCodeAsync_DiscountCodeIsNull_ThrowsArgumentException(string code)
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await _shoppingService.AddDiscountCodeAsync(new Models.Discount
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await _shoppingService.AddDiscountCodeAsync("basket-1", new Models.Discount
             {
-                Code = code,
-                BasketId = "basket-1"
+                Code = code
             }));
+
+            Assert.Equal(exception.Message, "Missing discount code.");
         }
     }
 }
