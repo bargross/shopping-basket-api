@@ -20,8 +20,8 @@ namespace shopping_basket_api.SQL
 
         public DbSet<BasketItem> BasketItem { get; set; }
 
-        public DbSet<Discount> BasketDiscounts { get; set; }
-
         public DbSet<ProcessedBasketItem> ProcessedBasketItem { get; set; }
+
+        public DbSet<Discount> BasketDiscounts { get; set; }
     }
 }
