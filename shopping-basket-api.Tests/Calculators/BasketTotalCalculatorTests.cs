@@ -39,9 +39,11 @@ namespace shopping_basket_api.Tests.Calculators
 
         private float CalculatePrice(BasketItem item, bool withVAT)
         {
-            var discountedPrice = item.Discount != default ? item.Price - (item.Price * item.Discount) : item.Price;
+            var discountValue = item.Discount != default ? (item.Discount / 100.0) : 0;
+            var vatValue = withVAT ? (float)(0.2 * item.Price) : 0;
+            var priceReductionValue = (float)discountValue * item.Price;
 
-            return withVAT ? discountedPrice + (discountedPrice * (float)0.2) : discountedPrice;
+            return (item.Price - priceReductionValue) + vatValue;
         }
     }
 }
