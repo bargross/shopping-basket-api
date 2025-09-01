@@ -11,7 +11,7 @@
 - run the following command to start the SQL Server container:
 ```docker-compose up -d```
 - this will start the SQL Server container in detached mode
-- check docker desktop, see the container is running, likely called "portalserver"
+- check docker desktop, see the container is running, likely called "sql-db"
 
 ## Connecting to the SQL Server container
 - open SQL Server Management Studio (SSMS)
@@ -21,3 +21,8 @@
 	- Login: 'sa'
 	- Password: 'pass123!' (this is the password set in the `docker-compose.yml` file)
 	- Connection Security Encryption: Optional
+
+## Cannot Connect To The Exposed Container
+- Ensure you don't already have a container running on port 1433
+- If a container is already being exposed on port 1433 change it in docker-compose.yml
+   - in line 11 change "1433:1433" for "1433:xxxx" chose ur port before doing this.
